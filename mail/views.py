@@ -39,4 +39,5 @@ def getmail(request):
     return HttpResponseRedirect(reverse('mail:home'))
   else:
     messages = get_my_messages(access_token)
-    return HttpResponse('Messages: {0}'.format(messages))
+    context = { 'messages': messages['value'] }
+    return render(request, 'mail/getmail.html', context)
