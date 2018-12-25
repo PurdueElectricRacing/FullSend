@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from mail.authhelper import get_signin_url, get_token_from_code, get_access_token
-from mail.outlookservice import get_me, get_my_messages, test_draft_message
+from mail.outlookservice import get_me, get_my_messages, test_send_message
 
 # Create your views here.
 def home(request):
@@ -48,5 +48,5 @@ def sendmail(request):
     if not access_token:
       return HttpResponseRedirect(reverse('mail:home'))
     else:
-      messages = test_draft_message(access_token)
+      messages = test_send_message(access_token)
       return HttpResponse(messages)
