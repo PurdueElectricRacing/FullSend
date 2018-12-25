@@ -66,3 +66,28 @@ def get_my_messages(access_token):
     return r.json()
   else:
     return "{0}: {1}".format(r.status_code, r.text)
+
+def test_draft_message(access_token):
+    post_messages_url = graph_endpoint.format('/me/messages')
+
+    email = {
+        'subject': 'Test subject',
+        'body': {
+            'contentType': 'HTML',
+            'content': 'Test with <b>bolded</b> text!'
+        },
+        'toRecipients': [
+            {
+                'emailAddress': {
+                    'address': 'schwar95@purdue.edu'
+                }
+            }
+        ]
+    }
+
+    r = make_api_call('POST', post_messages_url, access_token, payload = email)
+
+    if (r.status_code == requests.codes.ok):
+      return r.json()
+    else:
+      return "{0}: {1}".format(r.status_code, r.text)
