@@ -9,7 +9,8 @@ from mail.outlookservice import get_me, get_my_messages, test_send_message
 def home(request):
   redirect_uri = request.build_absolute_uri(reverse('mail:gettoken'))
   sign_in_url = get_signin_url(redirect_uri)
-  return HttpResponse('<a href="' + sign_in_url +'">Click here to sign in and view your mail</a>')
+  context = {'signin_url': sign_in_url}
+  return render(request, 'mail/home.html', context)
 
 def gettoken(request):
   auth_code = request.GET['code']
