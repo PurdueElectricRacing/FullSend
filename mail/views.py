@@ -2,8 +2,10 @@ import time
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+
 from mail.authhelper import get_signin_url, get_token_from_code, get_access_token
-from mail.outlookservice import get_me, get_my_messages, test_send_message
+from mail.outlookservice import get_me, get_my_messages, test_send_message, send_message
+from mail.formhandler import MailForm
 
 # Create your views here.
 def home(request):
@@ -49,5 +51,16 @@ def sendmail(request):
     if not access_token:
       return HttpResponseRedirect(reverse('mail:home'))
     else:
-      messages = test_send_message(access_token)
-      return HttpResponse(messages)
+      if request.method == 'POST':
+        form = MailForm(request.POST)
+        if form.is_valid():
+          email_destination = form.cleaned_data['email_destination']
+          email_content = form.cleaned_data['email_content']
+          messages = send_message(access_token, email_destination, email_content)
+          return HttpResponseRedirect('/')
+      else:
+        form = MailForm()
+      return render(request, 'mail/sendmail.html', {'form': form})
+        # Do stuff with the form post
+        # messages = test_send_message(access_token)
+        # return HttpResponse('Message')

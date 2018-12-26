@@ -94,3 +94,30 @@ def test_send_message(access_token):
       return 'Message sent!'
     else:
       return "{0}: {1}".format(r.status_code, r.text)
+
+def send_message(access_token, email_address, email_content):
+    post_messages_url = graph_endpoint.format('/me/sendMail')
+    email = {
+        'message': {
+            'subject': 'Automated email',
+            'body': {
+                'contentType': 'HTML',
+                'content': email_content
+            },
+            'toRecipients': [
+                {
+                    'emailAddress': {
+                        'address': email_address
+                    }
+                }
+            ]
+        }
+    }
+
+    r = make_api_call('POST', post_messages_url, access_token, payload = email)
+
+    if (r.status_code == requests.codes.accepted):
+      # return r.json()
+      return 'Message sent!'
+    else:
+      return "{0}: {1}".format(r.status_code, r.text)
