@@ -54,9 +54,7 @@ def sendmail(request):
       if request.method == 'POST':
         form = MailForm(request.POST)
         if form.is_valid():
-          email_destination = form.cleaned_data['email_destination']
-          email_content = form.cleaned_data['email_content']
-          messages = send_message(access_token, email_destination, email_content)
+          messages = send_message(access_token, form.clean())
           return HttpResponseRedirect('/')
       else:
         form = MailForm()

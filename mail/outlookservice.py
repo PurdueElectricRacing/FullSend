@@ -95,19 +95,19 @@ def test_send_message(access_token):
     else:
       return "{0}: {1}".format(r.status_code, r.text)
 
-def send_message(access_token, email_address, email_content):
+def send_message(access_token, content):
     post_messages_url = graph_endpoint.format('/me/sendMail')
     email = {
         'message': {
-            'subject': 'Automated email',
+            'subject': content['subject'],
             'body': {
                 'contentType': 'HTML',
-                'content': email_content
+                'content': content['content']
             },
             'toRecipients': [
                 {
                     'emailAddress': {
-                        'address': email_address
+                        'address': content['destination']
                     }
                 }
             ]
