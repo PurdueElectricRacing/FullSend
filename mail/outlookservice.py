@@ -100,7 +100,7 @@ def test_send_message(access_token):
 def generate_email(form):
     email = []
     if form['send_type'] == 'individual':
-        for recipient in form['destination']:
+        for recipient in form['send_list']:
             email.append({
                 'message': {
                     'subject': form['subject'],
@@ -135,7 +135,7 @@ def generate_email(form):
                 'bccRecipients': []
             }
         })
-        for recipient in form['destination']:
+        for recipient in form['send_list']:
             email[0]['message']['bccRecipients'].append({
                 'emailAddress': {
                     'address': recipient
@@ -147,6 +147,7 @@ def send_message(access_token, emails):
     post_messages_url = graph_endpoint.format('/me/sendMail')
     if DEBUG == True:
         # Don't actually send the emails in DEBUG mode
+        print('Emails that would have been sent:')
         print(emails)
     else:
         for email in emails:
