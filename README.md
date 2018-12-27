@@ -14,7 +14,7 @@ Head over to https://apps.dev.microsoft.com to quickly get a application ID and 
 
 Once you're signed in, click the **Add an app** button. Enter `FullSend` for the name and click **Create application**. After the app is created, locate the **Application Secrets** section, and click the **Generate New Password** button. Copy the password now and save it to a safe place. Once you've copied the password, click **Ok**.
 
-Locate the **Platforms** section, and click **Add Platform**. Choose **Web**, then enter `http://localhost:8000/fullsend/gettoken/` under **Redirect URIs**. 
+Locate the **Platforms** section, and click **Add Platform**. Choose **Web**, then enter `http://localhost:8000/mail/gettoken/` under **Redirect URIs**.
 
 > **NOTE:** The values in **Redirect URIs** are case-sensitive, so be sure to match the case!
 
@@ -22,7 +22,7 @@ Click **Save** to complete the registration. Copy the **Application Id** and sav
 
 ## Configure the sample
 
-1. Open the `.\fullsend\authhelper.py` file.
+1. Open the `.\FullSend\authhelper.py` file.
 1. Replace `YOUR APP ID HERE` with the **Application Id** from the registration you just created.
 1. Replace `YOUR APP PASSWORD HERE` with the password you copied earlier.
 1. Install dependencies by entering `pip install -r requirements.txt` at the command prompt.

@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
-from mail.authhelper import get_signin_url, get_token_from_code, get_access_token
+from FullSend.authhelper import get_signin_url, get_token_from_code, get_access_token
 from mail.outlookservice import get_me, get_my_messages, generate_email, send_message
 from mail.formhandler import MailForm
 
