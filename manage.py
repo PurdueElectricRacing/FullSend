@@ -2,8 +2,6 @@
 import os
 import sys
 
-DEBUG = True
-
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'FullSend.settings')
     try:

@@ -2,7 +2,7 @@ import requests
 import uuid
 import json
 
-from manage import DEBUG
+from FullSend.settings import DEBUG
 
 graph_endpoint = 'https://graph.microsoft.com/v1.0{0}'
 
