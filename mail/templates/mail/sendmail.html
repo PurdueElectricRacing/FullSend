@@ -1,9 +1,21 @@
 {% extends "mail/layout.html" %}
 {% block content %}
+{% load static %}
+<script src="{% static 'mail/text.js' %}"></script>
 <h1>Send Email</h1>
 <form action="/mail/sendmail/" method="post">
     {% csrf_token %}
-    {{ form }}
+    <table class="table">
+        {{ form }}
+    </table>
     <input type="submit" value="Submit">
 </form>
+
+<div>
+    <!-- List all mustache elements found in textarea -->
+    <h3>Elements found</h3>
+    <table class="table" id="found_elements">
+
+    </table>
+</div>
 {% endblock %}

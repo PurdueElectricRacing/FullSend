@@ -10,6 +10,7 @@ class MailForm(forms.Form):
                 ('bcc', 'Send as BCC')
             )
         )
+    send_list = forms.FileField(label='Upload CSV')
 
     def clean(self):
         return self.cleaned_data

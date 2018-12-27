@@ -52,7 +52,7 @@ def sendmail(request):
       return HttpResponseRedirect(reverse('mail:home'))
     else:
       if request.method == 'POST':
-        form = MailForm(request.POST)
+        form = MailForm(request.POST, request.FILES)
         if form.is_valid():
           emails = generate_email(form.clean())
           messages = send_message(access_token, emails)
