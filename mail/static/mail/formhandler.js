@@ -7,8 +7,11 @@ window.onload = function() {
         var found = textbox.value.match(mustache_regex);
         if (found) {
             for (var i = 0 ; i < found.length; i++) {
+                var element = found[i].match(inner_regex)[0];
                 html += '<tr><td>';
-                html += found[i].match(inner_regex)[0];
+                html += headers.includes(element) ? '' : '<b>';
+                html += element;
+                html += headers.includes(element) ? '' : '</b>';
                 html += '</td></tr>';
             }
         }
@@ -19,13 +22,14 @@ window.onload = function() {
     textbox.onblur = check_for_mustache_elements;
 
     var fileInput = document.getElementById('id_send_list');
+    var headers = [];
     var load_handler = function(event) {
         var html = '';
         var csv = event.target.result;
-        var allTextLines = csv.split(/\r\n|\n/)[0].split(',');
-        for (var i = 0; i < allTextLines.length; i++) {
+        headers = csv.split(/\r\n|\n/)[0].split(',');
+        for (var i = 0; i < headers.length; i++) {
             html += '<tr><td>';
-            html += allTextLines[i];
+            html += headers[i];
             html += '</td></tr>';
         }
         document.getElementById('csv_found').innerHTML = html;
