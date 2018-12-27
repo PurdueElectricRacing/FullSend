@@ -1,25 +1,3 @@
-// window.onload = function() {
-//   var txts = document.getElementsByTagName('TEXTAREA');
-//
-//   for(var i = 0, l = txts.length; i < l; i++) {
-//     if(/^[0-9]+$/.test(txts[i].getAttribute("maxlength"))) {
-//       var func = function() {
-//         var len = parseInt(this.getAttribute("maxlength"), 10);
-//
-//         if(this.value.length > len) {
-//           alert('Maximum length exceeded: ' + len);
-//           this.value = this.value.substr(0, len);
-//           return false;
-//         }
-//       }
-//
-//       txts[i].onkeyup = func;
-//       txts[i].onblur = func;
-//     }
-//   };
-//
-// }
-
 window.onload = function() {
     var textbox = document.getElementById('id_content');
     var check_for_mustache_elements = function() {
@@ -29,15 +7,49 @@ window.onload = function() {
         var found = textbox.value.match(mustache_regex);
         if (found) {
             for (var i = 0 ; i < found.length; i++) {
-                // console.log(found[i].match(inner_regex)[0]);
                 html += '<tr><td>';
                 html += found[i].match(inner_regex)[0];
                 html += '</td></tr>';
             }
         }
-        document.getElementById('found_elements').innerHTML = html;
+        document.getElementById('content_found').innerHTML = html;
     }
 
     textbox.onkeyup = check_for_mustache_elements;
     textbox.onblur = check_for_mustache_elements;
+
+    var fileInput = document.getElementById('id_send_list');
+    var load_handler = function(event) {
+        var html = '';
+        var csv = event.target.result;
+        var allTextLines = csv.split(/\r\n|\n/)[0].split(',');
+        for (var i = 0; i < allTextLines.length; i++) {
+            html += '<tr><td>';
+            html += allTextLines[i];
+            html += '</td></tr>';
+        }
+        document.getElementById('csv_found').innerHTML = html;
+    }
+    var error_handler = function() {
+        alert('Something went wrong while reading');
+    }
+    var scan_file = function() {
+        var html = '';
+        if ('files' in fileInput) {
+            if (fileInput.files.length == 1) {
+                var file = fileInput.files[0];
+                // Try to read the file if FileReader supported
+                if (window.FileReader) {
+                    var reader = new FileReader();
+                    reader.readAsText(file);
+                    reader.onload = load_handler;
+                    reader.onerror = error_handler;
+                } else {
+                    alert('FileReader are not supported in this browser.');
+                }
+            }
+        }
+    }
+
+    fileInput.onchange = scan_file;
 }
