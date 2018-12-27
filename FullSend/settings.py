@@ -25,7 +25,7 @@ SECRET_KEY = '@jiooinq#kwi-l20e^nwgjuofgh1i*g2nrbruvkqqf8-4up$7a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
