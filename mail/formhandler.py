@@ -1,7 +1,7 @@
 from django import forms
 
 class MailForm(forms.Form):
-    destination = forms.EmailField(label='To')
+    send_list = forms.FileField(label='Upload CSV')
     subject = forms.CharField(label='Subject')
     content = forms.CharField(label='Content', widget=forms.Textarea)
     send_type = forms.ChoiceField(
@@ -10,7 +10,6 @@ class MailForm(forms.Form):
                 ('bcc', 'Send as BCC')
             )
         )
-    send_list = forms.FileField(label='Upload CSV')
 
     def format(self):
         cleaned = self.cleaned_data
