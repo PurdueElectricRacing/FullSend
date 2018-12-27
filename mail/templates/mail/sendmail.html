@@ -3,7 +3,7 @@
 {% load static %}
 <script src="{% static 'mail/formhandler.js' %}"></script>
 <h1>Send Email</h1>
-<form action="/mail/sendmail/" method="post">
+<form action="/mail/sendmail/" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <table class="table">
         {{ form }}
