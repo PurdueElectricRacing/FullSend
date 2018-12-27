@@ -100,13 +100,16 @@ def test_send_message(access_token):
 def generate_email(form):
     email = []
     if form['send_type'] == 'individual':
-        for recipient in form['send_list']:
+        for index, recipient in enumerate(form['send_list']['EMAIL']):
+            content = form['content']
+            for replacement in form['send_list'].keys():
+                content = content.replace('{{' + replacement + '}}', form['send_list'][replacement][index])
             email.append({
                 'message': {
                     'subject': form['subject'],
                     'body': {
                         'contentType': 'HTML',
-                        'content': form['content']
+                        'content': content
                     },
                     'toRecipients': [
                         {
@@ -135,7 +138,7 @@ def generate_email(form):
                 'bccRecipients': []
             }
         })
-        for recipient in form['send_list']:
+        for recipient in form['send_list']['EMAIL']:
             email[0]['message']['bccRecipients'].append({
                 'emailAddress': {
                     'address': recipient
@@ -148,7 +151,7 @@ def send_message(access_token, emails):
     if DEBUG == True:
         # Don't actually send the emails in DEBUG mode
         print('Emails that would have been sent:')
-        print(emails)
+        print(json.dumps(emails, indent = 2))
     else:
         for email in emails:
             res = make_api_call('POST', post_messages_url, access_token, payload = email)
