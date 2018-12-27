@@ -104,6 +104,7 @@ def generate_email(form):
             content = form['content']
             for replacement in form['send_list'].keys():
                 content = content.replace('{{' + replacement + '}}', form['send_list'][replacement][index])
+            content = content.replace('\r\n', '<br />').replace('\n', '<br />')
             email.append({
                 'message': {
                     'subject': form['subject'],
