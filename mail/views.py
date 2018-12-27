@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
 from mail.authhelper import get_signin_url, get_token_from_code, get_access_token
-from mail.outlookservice import get_me, get_my_messages, test_send_message, send_message
+from mail.outlookservice import get_me, get_my_messages, generate_email, send_message
 from mail.formhandler import MailForm
 
 # Create your views here.
@@ -54,7 +54,8 @@ def sendmail(request):
       if request.method == 'POST':
         form = MailForm(request.POST)
         if form.is_valid():
-          messages = send_message(access_token, form.clean())
+          emails = generate_email(form.clean())
+          messages = send_message(access_token, emails)
           return HttpResponseRedirect('/')
       else:
         form = MailForm()

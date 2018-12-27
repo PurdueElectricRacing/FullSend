@@ -2,6 +2,8 @@ import requests
 import uuid
 import json
 
+from manage import DEBUG
+
 graph_endpoint = 'https://graph.microsoft.com/v1.0{0}'
 
 # Generic API Sending
@@ -95,29 +97,61 @@ def test_send_message(access_token):
     else:
       return "{0}: {1}".format(r.status_code, r.text)
 
-def send_message(access_token, content):
-    post_messages_url = graph_endpoint.format('/me/sendMail')
-    email = {
-        'message': {
-            'subject': content['subject'],
-            'body': {
-                'contentType': 'HTML',
-                'content': content['content']
-            },
-            'toRecipients': [
-                {
-                    'emailAddress': {
-                        'address': content['destination']
-                    }
+def generate_email(form):
+    email = []
+    if form['send_type'] == 'individual':
+        for recipient in form['destination']:
+            email.append({
+                'message': {
+                    'subject': form['subject'],
+                    'body': {
+                        'contentType': 'HTML',
+                        'content': form['content']
+                    },
+                    'toRecipients': [
+                        {
+                            'emailAddress': {
+                                'address': recipient
+                            }
+                        }
+                    ]
                 }
-            ]
-        }
-    }
+            })
+    elif form['send_type'] == 'bcc':
+        email.append({
+            'message': {
+                'subject': form['subject'],
+                'body': {
+                    'contentType': 'HTML',
+                    'content': form['content']
+                },
+                'toRecipients': [
+                    {
+                        'emailAddress': {
+                            'address': 'eformula@purdue.edu'
+                        }
+                    }
+                ],
+                'bccRecipients': []
+            }
+        })
+        for recipient in form['destination']:
+            email[0]['message']['bccRecipients'].append({
+                'emailAddress': {
+                    'address': recipient
+                }
+            })
+    return email
 
-    r = make_api_call('POST', post_messages_url, access_token, payload = email)
-
-    if (r.status_code == requests.codes.accepted):
-      # return r.json()
-      return 'Message sent!'
+def send_message(access_token, emails):
+    post_messages_url = graph_endpoint.format('/me/sendMail')
+    if DEBUG == True:
+        # Don't actually send the emails in DEBUG mode
+        print(emails)
     else:
-      return "{0}: {1}".format(r.status_code, r.text)
+        for email in emails:
+            res = make_api_call('POST', post_messages_url, access_token, payload = email)
+            if res.status_code != requests.codes.accepted:
+                return "{0}: {1}".format(r.status_code, r.text)
+
+    return 'Message sent!'
