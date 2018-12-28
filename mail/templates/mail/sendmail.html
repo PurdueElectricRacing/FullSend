@@ -2,24 +2,32 @@
 {% block content %}
 {% load static %}
 <script src="{% static 'mail/formhandler.js' %}"></script>
-<h1>Send Email</h1>
-<form action="/mail/sendmail/" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <table class="table">
-        {{ form }}
-    </table>
-    <input type="submit" value="Submit">
-</form>
+<link rel="stylesheet" type="text/css" href="{% static 'mail/style.css' %}">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+            <h1>Send Email</h1>
+            <form action="/mail/sendmail/" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table class="table">
+                    {{ form }}
+                </table>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        <div class="col-lg-6">
+            <div>
+                <!-- List all mustache elements found in textarea -->
+                <h3>Elements found in content</h3>
+                <table class="table" id="content_found">
 
-<div>
-    <!-- List all mustache elements found in textarea -->
-    <h3>Elements found in content</h3>
-    <table class="table" id="content_found">
+                </table>
+                <h3>Elements found in CSV</h3>
+                <table class="table" id="csv_found">
 
-    </table>
-    <h3>Elements found in CSV</h3>
-    <table class="table" id="csv_found">
-
-    </table>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
