@@ -15,7 +15,27 @@ window.onload = function() {
                 html += '</td></tr>';
             }
         }
+        update_preview(found);
         document.getElementById('content_found').innerHTML = html;
+    }
+    var update_preview = function(found) {
+        var html = textbox.value;
+        var mismatch = document.getElementById('mismatch');
+        for (var i = 0; i < headers.length; i++) {
+            html = html.replace('{{' + headers[i] + '}}', first_row[i]);
+        }
+        html = html.replace(/\r\n|\n/g, '<br />');
+        if (found && !found.every(function (element) { return headers.includes(element.replace(/{|}/g, '')); })) {
+            mismatch.style.display = 'block';
+            mismatch.innerHTML = 'You\'re missing the following: '
+                + found
+                    .filter(function (x) { return !headers.includes(x.replace(/{|}/g, '')); })
+                    .join(', ')
+                    .replace(/{|}/g, '');
+        } else {
+            mismatch.style.display = 'none';
+        }
+        document.getElementById('preview').innerHTML = html;
     }
 
     textbox.onkeyup = check_for_mustache_elements;
@@ -23,16 +43,19 @@ window.onload = function() {
 
     var fileInput = document.getElementById('id_send_list');
     var headers = [];
+    var first_row = [];
     var load_handler = function(event) {
         var html = '';
         var csv = event.target.result;
         headers = csv.split(/\r\n|\n/)[0].split(',');
+        first_row = csv.split(/\r\n|\n/)[1].split(',');
         for (var i = 0; i < headers.length; i++) {
             html += '<tr><td>';
             html += headers[i];
             html += '</td></tr>';
         }
         document.getElementById('csv_found').innerHTML = html;
+        check_for_mustache_elements(); // Update the content so things can be unbolded
     }
     var error_handler = function() {
         alert('Something went wrong while reading');
