@@ -21,6 +21,7 @@ window.onload = function() {
     var update_preview = function(found) {
         var html = textbox.value;
         var mismatch = document.getElementById('mismatch');
+        var preview = document.getElementById('preview');
         for (var i = 0; i < headers.length; i++) {
             html = html.replace('{{' + headers[i] + '}}', first_row[i]);
         }
@@ -35,7 +36,13 @@ window.onload = function() {
         } else {
             mismatch.style.display = 'none';
         }
-        document.getElementById('preview').innerHTML = html;
+
+        if (html) {
+            preview.style.display = 'block';
+        } else {
+            preview.style.display = 'none';
+        }
+        preview.innerHTML = html;
     }
 
     textbox.onkeyup = check_for_mustache_elements;
