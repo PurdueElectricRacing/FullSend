@@ -23,7 +23,8 @@ window.onload = function() {
         var mismatch = document.getElementById('mismatch');
         var preview = document.getElementById('preview');
         for (var i = 0; i < headers.length; i++) {
-            html = html.replace('{{' + headers[i] + '}}', first_row[i]);
+            var target = new RegExp('{{' + headers[i] + '}}', 'g');
+            html = html.replace(target, first_row[i]);
         }
         html = html.replace(/\r\n|\n/g, '<br />');
         if (found && !found.every(function (element) { return headers.includes(element.replace(/{|}/g, '')); })) {
