@@ -1,4 +1,6 @@
 import time
+from threading import Thread
+
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -57,7 +59,8 @@ def sendmail(request):
             if not form.file_is_valid(request.FILES):
                 return HttpResponseRedirect('mail:sendmail')
             emails = generate_email(form.format())
-            messages = send_message(access_token, emails)
+            # Send asynchronous emails and immediately redirect. A summary email will be sent to the user after the emails have completed
+            Thread(target = send_message, args = (access_token, emails)).start()
             return HttpResponseRedirect('/')
       else:
         form = MailForm()
@@ -76,7 +79,8 @@ def quicksend(request):
         form = QuickForm(request.POST)
         if form.is_valid():
             emails = generate_email(form.format())
-            messages = send_message(access_token, emails)
+            # Send asynchronous emails and immediately redirect. A summary email will be sent to the user after the emails have completed
+            Thread(target = send_message, args = (access_token, emails)).start()
             return HttpResponseRedirect('/')
       else:
         form = QuickForm()
