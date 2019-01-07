@@ -70,7 +70,7 @@ window.onload = function() {
     }
     var scan_file = function() {
         var html = '';
-        if ('files' in fileInput) {
+        if (fileInput.files != null) {
             if (fileInput.files.length == 1) {
                 var file = fileInput.files[0];
                 // Try to read the file if FileReader supported
@@ -87,4 +87,42 @@ window.onload = function() {
     }
 
     fileInput.onchange = scan_file;
+
+    var set_content = function(event) {
+        var html = event.target.result;
+        document.getElementById('id_content').value = html;
+        check_for_mustache_elements(); // Update the content so things can be unbolded
+    }
+    var upload_HTML = function() {
+        if (fileUploader.files != null) {
+            if (fileUploader.files.length == 1) {
+                var file = fileUploader.files[0];
+                // Try to read the file if FileReader supported
+                if (window.FileReader) {
+                    var reader = new FileReader();
+                    reader.readAsText(file);
+                    reader.onload = set_content;
+                    reader.onerror = error_handler;
+                } else {
+                    alert('FileReader are not supported in this browser.');
+                }
+            }
+        }
+    }
+
+    var wrapper = document.getElementById('id_content').parentNode;
+    // Add divider
+    var divider = document.createElement('hr');
+    divider.setAttribute('class', 'hr-text');
+    divider.setAttribute('data-content', 'OR');
+    wrapper.appendChild(divider);
+    // Add label
+    var contents = document.createTextNode('Upload HTML file: ');
+    wrapper.appendChild(contents);
+    // Add file uploader
+    var fileUploader = document.createElement('input');
+    fileUploader.setAttribute('type', 'file');
+    wrapper.appendChild(fileUploader);
+
+    fileUploader.onchange = upload_HTML;
 }

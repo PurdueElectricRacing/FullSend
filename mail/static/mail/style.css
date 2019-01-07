@@ -2,3 +2,35 @@ textarea {
     resize: vertical;
     width: 100%;
 }
+
+/* https://codepen.io/scottzirkel/pen/yNxNME */
+.hr-text {
+    line-height: 1em;
+    position: relative;
+    outline: 0;
+    border: 0;
+    color: black;
+    text-align: center;
+    height: 1.5em;
+    opacity: .5;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+.hr-text:before {
+    content: '';
+    background: black;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+}
+.hr-text:after {
+    content: attr(data-content);
+    position: relative;
+    display: inline-block;
+    color: black;
+    padding: 0 .5em;
+    line-height: 1.5em;
+    background-color: #fcfcfa;
+}
