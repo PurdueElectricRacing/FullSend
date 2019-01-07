@@ -1,0 +1,32 @@
+{% extends "mail/layout.html" %}
+{% block content %}
+{% load static %}
+<script src="{% static 'mail/formhandler.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'mail/style.css' %}">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+            <h1>Quick Send</h1>
+            <form action="/mail/quicksend/" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table class="table">
+                    {{ form }}
+                </table>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        <div class="col-lg-6">
+            <div>
+                <!-- List all mustache elements found in textarea -->
+                <h3>Elements found in content</h3>
+                <table class="table" id="content_found">
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="alert alert-danger" role="alert" id="mismatch" style="display: none;"></div>
+<div class="well" id="preview" style="display: none;"></div>
+{% endblock %}

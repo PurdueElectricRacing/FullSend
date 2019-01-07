@@ -30,3 +30,17 @@ class MailForm(forms.Form):
 
     def file_is_valid(self, file):
         return file['send_list'].name.endswith('.csv')
+
+class QuickForm(forms.Form):
+    send_list = forms.CharField(label='To')
+    subject = forms.CharField(label='Subject')
+    content = forms.CharField(label='Content', widget=forms.Textarea)
+
+    def format(self):
+        cleaned = self.cleaned_data
+        # Format it as if it came from a CSV file
+        cleaned['send_list'] = {
+            'EMAIL': [cleaned['send_list']]
+        }
+        cleaned['send_type'] = 'individual'
+        return cleaned

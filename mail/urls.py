@@ -12,5 +12,7 @@ urlpatterns = [
   # Mail view ('/mail/getmail/')
   url(r'^getmail/$', views.getmail, name='getmail'),
   # Test sending ('/mail/sendmail')
-  url(r'^sendmail/$', views.sendmail, name='sendmail')
+  url(r'^sendmail/$', views.sendmail, name='sendmail'),
+  # Quick send ('/mail/quicksend')
+  url(r'^quicksend/$', views.quicksend, name='quicksend')
 ]

@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from FullSend.authhelper import get_signin_url, get_token_from_code, get_access_token
 from mail.outlookservice import get_me, get_my_messages, generate_email, send_message
-from mail.formhandler import MailForm
+from mail.formhandler import MailForm, QuickForm
 
 # Create your views here.
 def home(request):
@@ -65,3 +65,19 @@ def sendmail(request):
         # Do stuff with the form post
         # messages = test_send_message(access_token)
         # return HttpResponse('Message')
+
+def quicksend(request):
+    access_token = get_access_token(request, request.build_absolute_uri(reverse('mail:gettoken')))
+    # If there is no token in the session, redirect to home
+    if not access_token:
+      return HttpResponseRedirect(reverse('mail:home'))
+    else:
+      if request.method == 'POST':
+        form = QuickForm(request.POST)
+        if form.is_valid():
+            emails = generate_email(form.format())
+            messages = send_message(access_token, emails)
+            return HttpResponseRedirect('/')
+      else:
+        form = QuickForm()
+      return render(request, 'mail/quicksend.html', {'form': form})
