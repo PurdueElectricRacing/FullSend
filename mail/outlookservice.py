@@ -149,6 +149,7 @@ def generate_email(form):
 
 def send_message(access_token, emails):
     post_messages_url = graph_endpoint.format('/me/sendMail')
+    success = True
     if DEBUG == True:
         # Don't actually send the emails in DEBUG mode
         print('Emails that would have been sent:')
@@ -157,6 +158,39 @@ def send_message(access_token, emails):
         for email in emails:
             res = make_api_call('POST', post_messages_url, access_token, payload = email)
             if res.status_code != requests.codes.accepted:
+                success = False
                 return "{0}: {1}".format(r.status_code, r.text)
 
-    return 'Message sent!'
+    # Send summary email
+    send_summary(access_token, emails, success)
+
+def send_summary(access_token, emails, success):
+    post_messages_url = graph_endpoint.format('/me/sendMail')
+    user_email = get_me(access_token)['mail']
+    content = ''
+    if DEBUG:
+        content += 'Your emails were not since because the server is in debug mode. A copy of the {} email(s) can be found below.<br><br>'.format(len(emails))
+    elif success:
+        content += 'Your emails were sent successfully. You sent {} email(s), and a copy of each can be found below.<br><br>'.format(len(emails))
+    else:
+        content += 'Your emails were <b>not</b> sent successfully. You tried to send {} email(s), which failed.<br><br>'.format(len(emails))
+    content += json.dumps(emails, indent = '&nbsp;&nbsp;&nbsp;&nbsp;').replace('\n', '<br>')
+    email = {
+        'message': {
+            'subject': 'FullSend Summary',
+            'body': {
+                'contentType': 'HTML',
+                'content': content
+            },
+            'toRecipients': [
+                {
+                    'emailAddress': {
+                        'address': user_email
+                    }
+                }
+            ]
+        }
+    }
+    res = make_api_call('POST', post_messages_url, access_token, payload = email)
+    if res.status_code != requests.codes.accepted:
+        return "{0}: {1}".format(r.status_code, r.text)
