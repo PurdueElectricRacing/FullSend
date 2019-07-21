@@ -6,7 +6,12 @@ FullSend is an automated email service that helps the Purdue Electric Racing tea
 ## Prerequisites
 
 - Python version 3.5.2 or later.
-- Django version 1.10 or later.
+
+## Development environment
+
+- Create a new virtualenv: `python3 -m venv venv`
+- Activate: `source venv/bin/activate`
+- Install prerequisistes `pip install -r requirements.txt`
 
 ## Register the app
 
@@ -25,9 +30,8 @@ Click **Save** to complete the registration. Copy the **Application Id** and sav
 1. Open the `.\FullSend\authhelper.py` file.
 1. Replace `YOUR APP ID HERE` with the **Application Id** from the registration you just created.
 1. Replace `YOUR APP PASSWORD HERE` with the password you copied earlier.
-1. Install dependencies by entering `pip install -r requirements.txt` at the command prompt.
-1. Run migrations by entering `python manage.py migrate` from the command prompt.
-1. Run the project by entering `python manage.py runserver` from the command prompt.
+1. Run migrations by entering `python3 manage.py migrate` from the command prompt.
+1. Run the project by entering `python3 manage.py runserver` from the command prompt.
 
 ## Acknowledgements
 This project was started using the [Outlook REST APIs Python Tutorial](https://docs.microsoft.com/en-us/outlook/rest/python-tutorial).
