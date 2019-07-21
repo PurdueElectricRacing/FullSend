@@ -3,10 +3,11 @@ import base64
 import json
 import time
 import requests
+import os
 
 # Client ID and secret
-client_id = 'YOUR APP ID HERE'
-client_secret = 'YOUR APP PASSWORD HERE'
+client_id = os.environ.get('CLIENT_ID')
+client_secret = os.environ.get('CLIENT_SECRET')
 
 # Constant strings for OAuth2 flow
 # The OAuth authority
