@@ -4,7 +4,6 @@ from threading import Thread
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden, HttpResponseNotAllowed
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
 
 from FullSend.authhelper import get_signin_url, get_token_from_code, get_access_token
 from mail.outlookservice import get_me, get_my_messages, generate_email, send_message
@@ -19,7 +18,6 @@ def home(request):
   context = {'signin_url': sign_in_url}
   return render(request, 'mail/home.html', context)
 
-@csrf_exempt
 def bounce(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])

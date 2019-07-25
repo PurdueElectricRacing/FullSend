@@ -1,10 +1,12 @@
 from django.conf.urls import url
+from django.views.decorators.csrf import csrf_exempt
 from api import views
 
 app_name = 'api'
 urlpatterns = [
-  # The home view ('/api/')
+  # List all available API commands
   url(r'^$', views.home, name='home'),
-  # Explicit home ('/api/bounce/')
-  url(r'^bounce/$', views.bounce, name='bounce')
+
+  # API endpoints
+  url(r'^bounce/$', csrf_exempt(views.bounce), name='bounce')
 ]
