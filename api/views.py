@@ -21,15 +21,8 @@ def home(request):
 
 @csrf_exempt
 def bounce(request):
-    print(request.headers)
-    sys.stdout.flush()
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
-    if request.headers['key'] is not 'abc':
+    if 'key' not in request.headers or request.headers['key'] != 'abc':
         return HttpResponseForbidden()
-    print(request.body)
-    sys.stdout.flush()
-    return JsonResponse({
-        'hello': 'world',
-        'heres': 'JOHNNY'
-    })
+    return HttpResponse('This part is in the works.')
