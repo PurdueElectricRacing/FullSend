@@ -8,5 +8,6 @@ urlpatterns = [
   url(r'^$', views.home, name='home'),
 
   # API endpoints
-  url(r'^bounce/$', csrf_exempt(views.bounce), name='bounce')
+  url(r'^bounce/$', csrf_exempt(views.bounce), name='bounce'),
+  url(r'^formsubmit/$', csrf_exempt(views.formsubmit), name='formsubmit')
 ]

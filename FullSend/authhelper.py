@@ -1,13 +1,17 @@
 from urllib.parse import quote, urlencode
+from django.http import HttpResponseNotAllowed, HttpResponseForbidden
+
 import base64
 import json
 import time
 import requests
 import os
+from functools import wraps
 
 # Client ID and secret
 client_id = os.environ.get('CLIENT_ID')
 client_secret = os.environ.get('CLIENT_SECRET')
+api_key = os.environ.get('API_KEY')
 
 # Constant strings for OAuth2 flow
 # The OAuth authority
@@ -97,3 +101,19 @@ def get_access_token(request, redirect_uri):
     request.session['token_expires'] = expiration
 
     return new_tokens['access_token']
+
+def api_key_required(f):
+  def wrap(request, *args, **kwargs):
+    if 'key' not in request.headers or request.headers['key'] != os.environ.get('API_KEY'):
+        return HttpResponseForbidden()
+    return f(request, *args, **kwargs)
+
+  return wrap
+
+def post_required(f):
+  def wrap(request, *args, **kwargs):
+    if request.method != 'POST':
+      return HttpResponseNotAllowed(['POST'])
+    return f(request, *args, **kwargs)
+
+  return wrap
