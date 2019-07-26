@@ -23,6 +23,7 @@ pytz==2019.1
 PyYAML==3.13
 requests==2.20.0
 requests-oauthlib==1.0.0
+sentry-sdk==0.10.2
 six==1.11.0
 sqlparse==0.3.0
 stringcase==1.2.0
