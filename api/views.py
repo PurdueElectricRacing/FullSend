@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpRe
 from django.urls import reverse
 
 from FullSend.authhelper import get_signin_url, get_token_from_code, get_access_token
-from FullSend.authhelper import api_key_required, post_required
+from FullSend.authhelper import api_key_required, post_required, get_token_from_refresh_token
 from mail.outlookservice import get_me, get_my_messages, generate_email, send_message, make_api_call
 from mail.formhandler import MailForm, QuickForm
 from api.googleservice import get_email_template
@@ -27,19 +27,25 @@ def bounce(request):
     return HttpResponse('This part is in the works.')
 
 def authorize(request):
-    redirect_uri = request.build_absolute_uri(reverse('api:showtoken'))
+    redirect_uri = request.build_absolute_uri(reverse('api:storetoken'))
     sign_in_url = get_signin_url(redirect_uri)
     return HttpResponse(f'Please visit here to sign in: <a href={sign_in_url}>{sign_in_url}</a>')
 
 def showtoken(request):
+    auth = ServerAuthentication.get_authentication()
+    if auth is None or auth.is_out_of_date():
+        return HttpResponse('Did not find any authentication.')
+    else:
+        return HttpResponse('Found authentication.')
+
+def storetoken(request):
     # There should only ever be onen ServerAuthentication, so update the most recent one
     auth = ServerAuthentication.get_authentication()
 
     auth_code = request.GET['code']
-    redirect_uri = request.build_absolute_uri(reverse('api:showtoken'))
+    redirect_uri = request.build_absolute_uri(reverse('api:storetoken'))
     token = get_token_from_code(auth_code, redirect_uri)
     access_token = token['access_token']
-    user = get_me(access_token)
     refresh_token = token['refresh_token']
     expires_in = token['expires_in']
 
@@ -53,15 +59,17 @@ def showtoken(request):
         auth = ServerAuthentication(
             access_token=access_token,
             refresh_token=refresh_token,
-            token_expires=expiration)
+            token_expires=expiration,
+            redirect_uri=redirect_uri)
     else:
         auth.access_token = access_token
         auth.refresh_token = refresh_token
         auth.token_expires = expiration
+        auth.redirect_uri = redirect_uri
 
     auth.save()
 
-    return HttpResponse('Success.')
+    return HttpResponseRedirect(reverse('api:showtoken'))
 
 @api_key_required
 @post_required
