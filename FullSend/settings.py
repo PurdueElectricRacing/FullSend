@@ -132,3 +132,8 @@ sentry_sdk.init(
     dsn= os.environ.get('SENTRY_DSN'),
     integrations=[DjangoIntegration()]
 )
+
+# Force HTTPS to be used to be able to auth with Microsoft Graph
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
