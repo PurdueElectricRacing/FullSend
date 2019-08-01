@@ -34,9 +34,9 @@ def authorize(request):
 def showtoken(request):
     auth = ServerAuthentication.get_authentication()
     if auth is None or auth.is_out_of_date():
-        return HttpResponse('Did not find any authentication.')
+        return HttpResponse('Did not find any authentication.', status=200)
     else:
-        return HttpResponse('Found authentication.')
+        return HttpResponse('Found authentication.', status=500)
 
 def storetoken(request):
     # There should only ever be onen ServerAuthentication, so update the most recent one
