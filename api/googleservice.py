@@ -10,7 +10,7 @@ from api.models import ServerAuthentication
 def refreshtoken():
     auth = ServerAuthentication.get_authentication()
     now = int(time.time())
-    if auth is not None and now < auth.token_expires:
+    if auth is not None:
         try:
             redirect_uri = auth.redirect_uri
             refresh_token = auth.refresh_token
@@ -45,7 +45,7 @@ def get_email_template(template_name):
 scheduler = BackgroundScheduler()
 # Add a degree of randomness (46-54) so it's not executing at a precise time
 scheduler.add_job(refreshtoken, 'cron', minute='50', jitter=240)
-scheduler.add_job(p, 'cron', minute='*', replace_existing=True, max_instances=1)
+scheduler.add_job(p, 'cron', minute='*/5', replace_existing=True, max_instances=1)
 scheduler.add_listener(
     event_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
 scheduler.start()
