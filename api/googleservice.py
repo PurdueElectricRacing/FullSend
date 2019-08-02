@@ -22,18 +22,15 @@ def refreshtoken():
             auth.token_expires = expiration
             auth.redirect_uri = redirect_uri
             
-            add_breadcrumb(message='access_token: {}\nrefresh_token: {}\ntoken_expires: {}\nredirect_uri" {}'.format(
-                auth.access_token[:10], auth.refresh_token[:10], str(auth.token_expires), auth.redirect_uri))
+            # Sentry filters out stuff like access_token so use short names
+            add_breadcrumb(message='short_a_t: {}\nshort_r_t: {}\nexpiration: {}\nredirect" {}'.format(
+                auth.access_token[:4], auth.refresh_token[:4], str(auth.token_expires), auth.redirect_uri))
 
             auth.save()
-            capture_message('Updated access token {} for time {}'.format(
-            auth.access_token[:10], str(auth.token_expires)))
+            capture_message('refreshtoken: updated access token')
         except Exception as e:
             capture_exception(e)
 
-
-def p():
-    capture_message('ping', level='info')
 
 def event_listener(event):
     if event.exception:
@@ -44,8 +41,7 @@ def get_email_template(template_name):
 
 scheduler = BackgroundScheduler()
 # Add a degree of randomness (46-54) so it's not executing at a precise time
-scheduler.add_job(refreshtoken, 'cron', minute='50', jitter=240)
-scheduler.add_job(p, 'cron', minute='*/5', replace_existing=True, max_instances=1)
+scheduler.add_job(refreshtoken, 'cron', minute='50', jitter=240, coalesce=True, misfire_grace_time=None, replace_existing=True, max_instances=1)
 scheduler.add_listener(
     event_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
 scheduler.start()
