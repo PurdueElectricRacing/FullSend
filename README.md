@@ -33,5 +33,9 @@ Click **Save** to complete the registration. Copy the **Application Id** and sav
 1. Run migrations by entering `python3 manage.py migrate` from the command prompt.
 1. Run the project by entering `python3 manage.py runserver` from the command prompt.
 
+## Services used
+* [Sentry.io](https://sentry.io/welcome/) - Used to monitor all errors
+* [UptimeRobot](https://uptimerobot.com/) - Used to keep heroku dyno active and monitor server uptime.
+
 ## Acknowledgements
 This project was started using the [Outlook REST APIs Python Tutorial](https://docs.microsoft.com/en-us/outlook/rest/python-tutorial).
