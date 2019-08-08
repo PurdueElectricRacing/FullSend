@@ -4,7 +4,7 @@ import time
 import os
 import requests
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden, HttpResponseNotAllowed, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden, HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseServerError
 from django.urls import reverse
 
 from FullSend.authhelper import get_signin_url, get_token_from_code, get_access_token
@@ -106,6 +106,6 @@ def formsubmit(request):
     res = make_api_call('POST', post_messages_url,
                         access_token, payload=email)
     if res.status_code != requests.codes.accepted:
-        return "{0}: {1}".format(res.status_code, res.text)
+        return HttpResponseServerError(f'Server token probably expired: {res.text}')
 
     return HttpResponse('This part is in the works.')
