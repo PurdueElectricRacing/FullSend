@@ -39,6 +39,8 @@ def event_listener(event):
         capture_message('Scheduler event to refresh token failed!', 'error')
 
 
+# This should be loaded when the app initially loads
+
 scheduler = BackgroundScheduler()
 # Add a degree of randomness (46-54) so it's not executing at a precise time
 scheduler.add_job(refreshtoken, 'cron', minute='50', jitter=240, coalesce=True,

@@ -134,6 +134,6 @@ sentry_sdk.init(
 )
 
 # Force HTTPS to be used to be able to auth with Microsoft Graph
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
