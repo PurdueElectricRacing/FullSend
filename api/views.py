@@ -11,8 +11,9 @@ from FullSend.authhelper import get_signin_url, get_token_from_code, get_access_
 from FullSend.authhelper import api_key_required, post_required, get_token_from_refresh_token
 from mail.outlookservice import get_me, get_my_messages, generate_email, send_message, make_api_call
 from mail.formhandler import MailForm, QuickForm
-from api.googleservice import get_email_subject, get_email_template, has_valid_template_type
+from api.googleservice import get_email_subject, has_valid_template_type
 from api.models import ServerAuthentication
+from api.format_service import format_email
 
 # Create your views here.
 
@@ -88,7 +89,7 @@ def formsubmit(request):
             'subject': get_email_subject(settings['type']),
             'body': {
                 'contentType': 'HTML',
-                'content': get_email_template(settings['type'])
+                'content': format_email(settings['type'], settings)
             },
             'toRecipients': [
                 {
