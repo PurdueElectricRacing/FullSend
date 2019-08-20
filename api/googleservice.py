@@ -23,7 +23,7 @@ def get_email_template(template_name):
             f'template name {template_name} not found in content_map')
 
     r = requests.get(
-        f'https://gist.githubusercontent.com/RyanSchw/4c3713d676f4d60511d98044b5083763/raw/7733f14223e43a9d4b0a56e5a025fb72166e5403/{content_map[template_name]}')
+        f'https://gist.githubusercontent.com/RyanSchw/4c3713d676f4d60511d98044b5083763/raw/{content_map[template_name]}')
 
     return r.text
 
