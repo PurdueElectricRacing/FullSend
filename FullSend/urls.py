@@ -23,4 +23,5 @@ urlpatterns = [
     # Defer any URLS to the /mail directory to the mail app
     url(r'^mail/', include('mail.urls', namespace='mail')),
     url(r'^admin/', admin.site.urls),
+    url(r'^api/', include('api.urls', namespace='api'))
 ]
