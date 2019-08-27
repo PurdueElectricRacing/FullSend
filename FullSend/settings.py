@@ -137,6 +137,3 @@ sentry_sdk.init(
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-
-# Use BackgroundScheduler to keep api token alive
-import api.conservation
