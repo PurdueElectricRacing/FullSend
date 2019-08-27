@@ -17,7 +17,8 @@ from api.models import ServerAuthentication
 from api.format_service import format_email
 
 # Create your views here.
-
+# Use BackgroundScheduler to keep api token alive
+import api.conservation
 
 def home(request):
   redirect_uri = request.build_absolute_uri(reverse('mail:gettoken'))
