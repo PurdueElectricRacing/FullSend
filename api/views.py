@@ -3,6 +3,7 @@ import json
 import time
 import os
 import requests
+from sentry_sdk import add_breadcrumb, capture_message
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden, HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseServerError
 from django.urls import reverse
@@ -101,6 +102,12 @@ def formsubmit(request):
         }
     }
 
+    add_breadcrumb(
+        category='email',
+        message=email,
+        level='info',
+    )
+
     # Copy from outlookservice
     graph_endpoint = 'https://graph.microsoft.com/v1.0{0}'
     post_messages_url = graph_endpoint.format('/me/sendMail')
@@ -108,5 +115,7 @@ def formsubmit(request):
                         access_token, payload=email)
     if res.status_code != requests.codes.accepted:
         return HttpResponseServerError(f'Server token probably expired: {res.text}')
+
+    capture_message('Email sent successfully')
 
     return HttpResponse('This part is in the works.')
